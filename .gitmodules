@@ -1,0 +1,3 @@
+[submodule "SEPA"]
+	path = SEPA
+	url = https://github.com/arces-wot/SEPA.git
