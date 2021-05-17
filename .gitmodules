@@ -1,3 +1,6 @@
 [submodule "SEPA"]
 	path = SEPA
 	url = https://github.com/arces-wot/SEPA.git
+[submodule "community-server"]
+	path = community-server
+	url = https://github.com/vaimee/community-server.git
