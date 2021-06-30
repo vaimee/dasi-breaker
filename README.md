@@ -20,10 +20,10 @@ The draft specifications of SEPA follow:
 4. [JSON SPARQL Application Profile (JSAP)](http://mml.arces.unibo.it/TR/jsap.html)
 
 References
-[SOLID Project](https://solidproject.org/)
-[NGSI-LD](https://www.etsi.org/deliver/etsi_gs/CIM/001_099/009/01.01.01_60/gs_CIM009v010101p.pdf)
-[WebAccessControl](https://solid.github.io/web-access-control-spec/)
-[JSON-LD 1.1 Processing Algorithm and API](https://www.w3.org/TR/json-ld11-api/)
-[Dynamic Linked Data: A SPARQL Event Processing Architecture](https://www.mdpi.com/284396)
-[WebId](https://dvcs.w3.org/hg/WebID/raw-file/tip/spec/identity-respec.html)
-[WebID-OIDC Authentication Spec](https://github.com/solid/webid-oidc-spec)
+* [SOLID Project](https://solidproject.org/)
+* [NGSI-LD](https://www.etsi.org/deliver/etsi_gs/CIM/001_099/009/01.01.01_60/gs_CIM009v010101p.pdf)
+* [WebAccessControl](https://solid.github.io/web-access-control-spec/)
+* [JSON-LD 1.1 Processing Algorithm and API](https://www.w3.org/TR/json-ld11-api/)
+* [Dynamic Linked Data: A SPARQL Event Processing Architecture](https://www.mdpi.com/284396)
+* [WebId](https://dvcs.w3.org/hg/WebID/raw-file/tip/spec/identity-respec.html)
+* [WebID-OIDC Authentication Spec](https://github.com/solid/webid-oidc-spec)
