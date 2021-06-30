@@ -25,5 +25,5 @@ References
 * [WebAccessControl](https://solid.github.io/web-access-control-spec/)
 * [JSON-LD 1.1 Processing Algorithm and API](https://www.w3.org/TR/json-ld11-api/)
 * [Dynamic Linked Data: A SPARQL Event Processing Architecture](https://www.mdpi.com/284396)
-* [WebId](https://dvcs.w3.org/hg/WebID/raw-file/tip/spec/identity-respec.html)
+* [WebID 1.0 Web Identity and Discovery](https://dvcs.w3.org/hg/WebID/raw-file/tip/spec/identity-respec.html)
 * [WebID-OIDC Authentication Spec](https://github.com/solid/webid-oidc-spec)
