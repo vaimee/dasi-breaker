@@ -4,8 +4,8 @@ DASI Breaker is a semantic open interoperability solution to break down data sil
 
 The project is funded by EU under the Grant Agreement No.: 871498 Call: H2020-ICT-2018-2020
 
-The following figure decipts the system architecture:
 ![Architecture](imgs/Dasi-Breaker-architecture.png)
+**System Architecture**
 
 The implementation is based on the following solutions and technologies:
 1. [SEPA](https://github.com/arces-wot/SEPA)
