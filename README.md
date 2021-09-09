@@ -33,4 +33,4 @@ The project is funded by EU under the Grant Agreement No.: 871498 Call: H2020-IC
 # Phase 1 deliverables
 * [Technical progress report](reports/mainReport.md)
 * [MVP - MONAS (Monitoring and Analysis System)](reports/usecase.md)
-* [Prototypes and demonstrators](reports/prototype.md)
+* [Prototypes and demonstrators](reports/prototypes.md)
