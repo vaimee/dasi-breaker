@@ -164,5 +164,5 @@ You can run TestSuite to verify the actual status of the implementation, [TestSu
 
 **SOLID**
 
-This Demo has the aim of showing the possibility to have authorization on low level SPARQL querys. We have have deployed a web application to show how it works.
+This demo aims to show the possibility to have authorization at SPARQL queries/updates level. A prototype web application is available to show how it works.
 
