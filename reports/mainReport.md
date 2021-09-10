@@ -17,7 +17,7 @@ The architecture of DASI-BREAKER project, shown in the following figure, is desi
 
 These APIs are not directly exposed on the internet but are hidden behind Traefik: a reverse proxy and load balancer which handles the routing of requests automatically, allowing the entire system to scale easily.
 
-![Architecture](RackMultipart20210909-4-1giibgc_html_1a78e30c38bbe68e.png)
+![Architecture](imgs/dasi-breaker-architecture.png)
 
 ## **SOLID**
 
@@ -159,7 +159,7 @@ Some of these services need one or more volumes for saving their configurations 
 
 At this time the entire stack has been replicated two times to separate the development/testing environment from the production.
 
-![Deployement](RackMultipart20210909-4-1giibgc_html_ec4380ea19d7b2b0.png)
+![Deployement](imgs/dasi-breaker-deployment.png)
 
 ## **FUTURE STEPS**
 
