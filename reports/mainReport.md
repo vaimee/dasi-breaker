@@ -13,7 +13,7 @@ alla fine -->
 
 ## **ARCHITECTURE**
 
-The architecture of DASI-BREAKER project, shown in the following figure, is designed to be microservices-oriented and it is composed of three main components: (i) the Community Solid Server, (ii) the Scorpio Broker, and (iii) the SEPA (SPARQL Event Processing Architecture). The first component is an open-source implementation of the Solid specifications that provides an LDP API to our system with identity management and access control. The second component is an open-source NGSI-LD context broker that implements the full NGSI-LD API specification. Both of these services use the third component (SEPA) as their SPARQL backend to store and retrieve data.
+The architecture of DASI-BREAKER project, shown in the following figure, is designed to be microservices-oriented and it is composed of three main components: (i) the [Community Solid Server](https://github.com/solid/community-server), (ii) the [Scorpio Broker](https://github.com/ScorpioBroker/ScorpioBroker), and (iii) the [SEPA (SPARQL Event Processing Architecture)](https://github.com/arces-wot/SEPA). The first component is an open-source implementation of the Solid specifications that provides an LDP API to our system with identity management and access control. The second component is an open-source NGSI-LD context broker that implements the full NGSI-LD API specification. Both of these services use the third component (SEPA) as their SPARQL backend to store and retrieve data.
 
 These APIs are not directly exposed on the internet but are hidden behind [Traefik](https://github.com/traefik/traefik): a reverse proxy and load balancer which handles the routing of requests automatically, allowing the entire system to scale easily.
 
