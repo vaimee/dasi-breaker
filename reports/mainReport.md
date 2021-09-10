@@ -160,17 +160,21 @@ Some of these services need one or more volumes for saving their configurations 
 At this time the entire stack has been replicated two times to separate the development/testing environment from the production.
 
 ![Deployement](RackMultipart20210909-4-1giibgc_html_ec4380ea19d7b2b0.png)
+
 ## **FUTURE STEPS**
+
+### SOLID WAC
+
+The next steps for the SOLID WAC part of the project will be:
+* Extending support for WAC-based authorization of more types of SPARQL 1.1 queries/updates.
+* As for now, nothing prevents users of a SEPA system from creating named graphs which do not comply with the naming assumptions currently made by the WAC algorithm for the ACL discovery. At the moment, we limited ourselves to exploiting a CSS instance connected to the underlying triplestore in such a way that storing WAC-compliant LDP resources, containers and ACL files becomes easier. In the future we will need to research a good way to either enforce a valid naming convention or to completely bypass this problem.
+* Integrating Keycloak with the SOLID WebID-OIDC authentication protocols. Community Solid Server has a built-in Identity Provider, but it is still at an early stage of development. Being able to use another IdP that is powerful, highly configurable and open source, such as Keycloak, could be very useful.
+* The decision to implement WAC inside SEPA brings a benefit that we still didn’t have time to fully exploit. In fact, what makes SEPA almost unique is its Publish-Subscribe mechanism. In the future it could be exploited for allowing users to  subscribe to a real-time log of the access to any resource, so that for example the owner could know and be notified for every type of interaction made by other users with his personal resources.
+
+### NGSI-LD
 
 According to the project proposal, the next steps for the NGSI-LD part will be to keep mapping the NGSI-LD API to the right behavior on the SEPA component. In particular, we need to focus on the translation of Scorpio's SQL queries that include geospatial features into the proper SPARQL queries. Another important work will be to identify and use -according to the rest of the architecture- the security layer provided by Scorpio for granting the right access to the resources.
 
 <!---## **CONCLUSIONS**
 
 alla fine-->
-
-
-
-
-
-
-
