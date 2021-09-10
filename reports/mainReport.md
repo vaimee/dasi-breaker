@@ -23,13 +23,26 @@ These APIs are not directly exposed on the internet but are hidden behind Traefi
 
 ### **ACTIVITIES**
 
-#### Contributions to Community Solid Server
+#### Preliminary analysis of the project requirements and of the WAC protocol
 
-##### Group feature for WAC
+The main goal of this activity was to build a flexible authorization layer over the SPARQL 1.1 protocol. The idea consists in integrating into the current architecture of SEPA the WAC standard ([WebAccessControl spec](https://solid.github.io/web-access-control-spec)) written by the SOLID community. The WAC protocol allows users of a system to manage permissions over resources (or collections of resources) just by editing an ACL in the form of an RDF document. In principle it should be possible to grant read/write/append/delete permissions to the public, only to authenticated users, to specific users, to groups of users or even to web-apps. In our scenario, the protected resources are named graphs stored inside the SEPA by users who want the data contained in them not to be publicly available.
 
-We have added the possibility for a user (WebID) to be part of a group of users. Now it&#39;s possible to give permission for a certain resource (read, write, append, control) to an entire group.
+SEPA doesn’t actually take care of storing the data but it demands this task to a proper triplestore. Application developers making use of the SEPA architecture should be able to choose the underlying triplestore that they prefer, based on their context and requirements. This means that the new authorization layer should not depend on the eventual non-standard features of particular triplestore implementations (such as the authorization layer provided by Virtuoso), while it should work at a higher abstraction level. The WAC protocol is very promising in these regards, since it enables the SEPA to apply ACL rules over single SPARQL queries/updates even before sending them to the underlying triplestore, eventually blocking unauthorized accesses to certain named graphs.
 
-For example the following file describes a group with only one member (http://localhost:3000/user\_group#me)
+#### Studying the WAC protocol
+
+First of all, we had to learn how the WAC protocol works. We did that by studying the [specification](https://solid.github.io/web-access-control-spec) written by the SOLID Authorization Panel, trying to understand all of its features and limitations. At the same time we discovered the existence of the [Community Solid Server](https://github.com/solid/community-server), the most recent SOLID server implementation which sets itself as the open source counterpart of the Enterprise Solid Server developed by Inrupt (a startup founded by Sir Tim Berners-Lee).
+
+We debugged and analyzed the CSS’s implementation of the WAC layer, finding out that it was still incomplete as it lacked support for giving access to groups of users. Actually, it also lacks support for web-apps, as the maintainers of that project told us that it’s still not a mature feature which needs further discussions and evaluations from the community.
+
+#### Contributing to the Community Solid Server: adding groups feature for WAC
+
+As a means to strengthen our skills related to WAC, we decided to contribute back to the SOLID community by implementing the groups feature into the CSS’s codebase and refactoring a bit their code for achieving slightly better performances. We enriched the CSS module responsible for the WAC implementation by adding all the logic needed to support ACL rules that grant access to groups of users.
+
+Thanks to our contribution, it’s now possible to define a vCard group containing the list of members together with any kind of auxiliary information. The group file can be stored anywhere on the web, with the only limitation of it needing to be publicly available without restrictions (otherwise authorization for that group will fail). This limitation avoids at the root the problem described here (["Infinite Request Loops in Group Listings"](https://github.com/solid/web-access-control-spec/blob/main/README-v0.5.0.md#infinite-request-loops-in-group-listings)), where the ACL for a “groupA” file points to a “groupB” file protected by another ACL that in turn points to the “groupA”, leading to an infinite loop. This problem obviously cannot occur if all the group files are publicly accessible.
+
+Here we show an example where we define a simple vCard group **<http://localhost:3000/test_group.ttl#customGroup>** with only one member named **<http://localhost:3000/test_user>**.
+
 ```turtle
 @prefix acl: <http://www.w3.org/ns/auth/acl#>;.
 @prefix dc: <http://purl.org/dc/terms/>;.
@@ -43,7 +56,7 @@ dc:modified "2015-08-08T14:45:15Z"^^xsd:dateTime;
 vcard:hasMember <http://localhost:3000/user\_group#me>. 
 ```
 
-the acl of a resource can specify the permissions of a group in the following way
+The ACL of a resource can grant some permissions to our “customGroup” in the following way:
 
 ```turtle
 @prefix acl:  <http://www.w3.org/ns/auth/acl#>;.
@@ -57,46 +70,34 @@ acl:mode acl:Write;
 acl:agentGroup <http://localhost:3000/test\_group#test>. 
 ```
 
-Our PR has been accepted and merged into version 2.0.0 of the Community Solid Server:
-
-[https://github.com/solid/community-server/pull/900](https://github.com/solid/community-server/pull/900)
-
-[https://github.com/solid/community-server/pull/923](https://github.com/solid/community-server/pull/923)
-
-contribuing to one of the biggest project reguarding Solid and receiving appreciation for our work (&quot;not just a new feature, but an improvement to the codebase overall.&quot; Ruben Verborgh).
-
-##### Keycloak Integration with Community Solid Server
-
-Community Solid Server has a build-in identity provider, but it is still at early age of development. Being able to use another identity provider that is powerful and open source, like Keycloak, could be very useful. So we have found a way to integrate the WebID-OIDC protocol used by the Community Solid Server with Keycloak.
-
-[CSS\_\_\_Keycloak.pdf](https://drive.google.com/file/d/1APn7vDKzhhZPS9c3HkGmlY6MnQbW30o9/view?usp=sharing)
-
 #### Contributions to SEPA
 
-##### Web Access Control algorithm implementation
+Having deeply understood how the WAC protocol works and how it is implemented in the state-of-the-art SOLID servers, we were then ready to integrate this new feature into the existing SEPA architecture. This task can be divided in two main steps: implementing the WAC algorithm and implementing a parser for SPARQL 1.1 queries/updates which is capable of understanding what named graphs need to be read and/or written during the query execution.
 
-We have implemented the Access Control mechanism described by the solid specification (WAC) inside SEPA architecture. This will have a a dual usage:
+First of all, we implemented the Web Access Control mechanism as described by the SOLID specification inside the SEPA architecture, exploiting the knowledge gained while working on the CSS’s implementation. This will have a dual usage:
+* Community Solid Server can delegate the WAC authorization process to a SEPA instance through a minimalistic REST API, leading to some advantages that will be described in the following;
+* the WAC mechanism can be exploited for authorizing SPARQL 1.1 queries/updates sent to a SEPA instance by an authenticated user.
 
-- We can delegate the Web Access Control that was done by the community solid server to SEPA, this will lead to some advantages that we will describe in the following.
-- We can use the access control mechanism for SPARQL query sent to SEPA.
+Let’s dive deeper into these two points.
 
-let&#39;s dive into this two points.
+#### WAC endpoint for Community Solid Server
 
-##### WAC endpoint for Community Solid Server
+We built an HTTP endpoint inside the SEPA architecture (**/wac**), so that the Community Solid Server can delegate the WebAccessControl mechanism to SEPA. By doing so, we provide a clear separation between the LDP capabilities of CSS and all the logic about how to check if a user has the requested permissions for an LDP resource. This enables us to move this logic even on a different server where, in the future, we could deploy parallelism to obtain faster responses.
 
-We built an endpoint inside SEPA (/wac), so that the community solid server can delegate the access control mechanism to SEPA. So we keep separate from the community solid server all the logic about how to check if a user (WebID) has the requested permission for a resource. In this way we can have this logic even in a different server, and in the future we could deploy parallelism to have faster responses.
+#### Standalone SPARQL authorization layer in SEPA
 
-The decision to implement WAC inside SEPA also has an other benefit, we could use the publish-subscribe mechanism, that make SEPA unique, for subscribing to the LOG of the access of every resource, so that the owner knows every type of interaction of other users with his resources.
+We have exploited the WAC implementation to implement an authorization mechanism for low level SPARQL queries. With the current implementation, the user can authenticate with an OAuth-compliant identity provider (e.g. Keycloak) in order to obtain a valid AccessToken that must be sent (as an “Authorization: Bearer” HTTP header) to the SEPA’s SPARQL endpoint along with the query/update. The SEPA instance is now able to process and verify the token, extracting the userID. The SPARQL 1.1 query/update is then parsed using the Apache Jena APIs in order to extract what are the involved named graphs and what actions are required to be performed on them. Finally, each of those graphs are passed to the WAC algorithm to assess whether the user permissions are enough for the requested operation. 
 
-##### SEPA WAC Standalone
-
-With the implementation of the logic of the Web Access Control, now SEPA support the authentication and authorization for SPARQL query. In this way it is possible to limit the permissions granted to specific users or group of users to make queries about specified resources.
+Doing this parsing step is quite challenging because of the inherent complexity of the SPARQL 1.1 protocol. At the moment we are able to support almost every possible SPARQL query/update structure, with the exception of those that contain at least a matching pattern referring to the DEFAULT GRAPH without specifying how the former is composed. The same applies also to the usage of graph variables (**WHERE { GRAPH ?g {...} … }**) since, because of the different implementations of the underlying triplestores, it’s not always possible to deterministically discover the full range of values that the ?g variable could assume.
+**Based on our current knowledge, being able to authorize low level SPARQL 1.1 queries/updates with fine-grained ACL rules to the level of a single named graph, adopting the WAC protocol and not being tied to a specific triplestore, is made possible only by our implementation.**
 
 ### **RESULTS**
 
-- Descrizione dei risultati ottenuti (basato esattamente sulle specifiche di progetto)
-- Link a documentazione esterna/demo/repository
-- Link: [https://pod.dasibreaker.vaimee.it](https://pod.dasibreaker.vaimee.it/)
+* Our PR on the CSS repository has been accepted and merged into the **versions/2.0.0 branch**. The full history of our contributions can be found in [#920](https://github.com/solid/community-server/pull/900) and [#923](https://github.com/solid/community-server/pull/923). Contributing to one of the biggest SOLID projects and receiving great appreciation for our work (“not just a new feature, but an improvement to the codebase overall” [cit. Ruben Verborgh](https://github.com/solid/community-server/pull/923#pullrequestreview-736084542)) was really rewarding while also being a great fun!
+* Implementation of a full WAC algorithm in the SEPA architecture.
+* Implementation of an HTTP endpoint (**/wac**) in the SEPA architecture to outsource the WAC authorization flow from any SOLID server.
+* Implementation of a WAC-based authorization mechanism for low level SPARQL 1.1 queries/updates, independent from the underlying triplestore.
+* Link: https://pod.dasibreaker.vaimee.it
 
 ## **NGSI-LD**
 
