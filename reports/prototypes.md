@@ -164,5 +164,17 @@ You can run TestSuite to verify the actual status of the implementation, [TestSu
 
 **SOLID**
 
-This demo aims to show the possibility to have authorization at SPARQL queries/updates level. A prototype web application is available to show how it works.
+A prototype web application is available to show the possibility to have authorization at SPARQL queries/update level.
+
+We have used:
+* An Angular web application as the client
+* The SEPA architecture for the Web Access Control, Token Validation and Query Parsing
+* The Identity Provider Keycloak
+* Blazegraph as Triple Store
+
+The prototype web application let us log in through Keycloak using the OpenID Connect protocol. Once we are authenticated we can send the SPARQL query that we want through a simple editor, only if we have the necessary permission we will be able to perform the query and download the data (if any), otherwise we will receive an error. Simple example queries are already prepared and easy to use.
+
+<img width="661" alt="SEPA_secure" src="https://user-images.githubusercontent.com/18251575/132925028-3849a994-9e19-4b39-9d8c-f3e78f310f42.png">
+
+
 
