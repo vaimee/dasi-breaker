@@ -1,4 +1,4 @@
-# Report for [DASI-BREAKER](https://docs.google.com/document/d/1Ul8JbYRaJieX35XhjGBwAobBKEQhu4srItczcP9nIO0/edit?usp=sharing)
+# Report for DASI-BREAKER
 **Reference tasks**
 > **Task 1 (Web Access Control)**<br>*Current SEPA implementation exploits the graph level access control offered by Virtuoso Open Source through the OpenID Connect interface provided by Keycloak. This task aims to extend this mechanism to make it independent from the underline SPARQL endpoint via the Web Access Control (WAC) specification.*
 >
@@ -7,33 +7,19 @@
 > **Task 3 (NGSI-LD)**<br>*This task aims to implement the ETSI NGSI-LD HTTP binding API. The current Java implementation provided by Scorpio released by NEC under the BSD license would be considered, along with already available open source JSON-LD libraries. The task outcomes will be: a first release where the entities/attributes providing and consumption are supported.*
 >
 >**Task 4 (Solid Protocol)**<br>*This task aims to implement the Solid Protocol [14]. The task will benefit of Task #1 outcome for what concerns the user access control. A first prototype will be delivered at M5 and a full protocol implementation at M7.*
-## **INTRODUCTION**
+<!--- ## **INTRODUCTION**
 
-alla fine
+alla fine -->
 
 ## **ARCHITECTURE**
 
-The architecture of DASI-BREAKER project, shown in the following figure, is designed to be microservices-oriented and it is composed of three main components, and: (i) the Community Solid Server, (ii) the Scorpio Broker, and (iii) the SEPA (SPARQL Event Processing Architecture). The first component is an open source implementation of the Solid specifications that provides an LDP API to our system with identity management, access control, etc. The second component is an open source NGSI-LD context broker that implements the full NGSI-LD API specification. Both of these services use the third component as their SPARQL backend to store and retrieve data.
+The architecture of DASI-BREAKER project, shown in the following figure, is designed to be microservices-oriented and it is composed of three main components, and: (i) the Community Solid Server, (ii) the Scorpio Broker, and (iii) the SEPA (SPARQL Event Processing Architecture). The first component is an open-source implementation of the Solid specifications that provides an LDP API to our system with identity management, access control, etc. The second component is an open-source NGSI-LD context broker that implements the full NGSI-LD API specification. Both of these services use the third component as their SPARQL backend to store and retrieve data.
 
-These APIs are not directly exposed on the internet, but are hidden behind Traefik: a reverse proxy and load balancer which handles the routing of requests automatically, allowing the entire system to scale easily.
+These APIs are not directly exposed on the internet but are hidden behind Traefik: a reverse proxy and load balancer which handles the routing of requests automatically, allowing the entire system to scale easily.
 
 ![Architecture](RackMultipart20210909-4-1giibgc_html_1a78e30c38bbe68e.png)
 
-### **DEPLOYMENT**
-
-The entire system runs on a cluster of Linux machines grouped together via [Docker Swarm](https://docs.docker.com/engine/swarm/).
-
-As you can see from the figure below and the [compose-file](https://todo.com/), there are 7 swarm services connected through the _default_ overlay network. This network allows the various services to communicate with each other securely; in fact, all traffic is encrypted by default using the AES algorithm in GCM mode. The only exposed services are those connected to the _traefik_ network that allows them to serve the related APIs on specific domains.
-
-Some of these services need one or more volumes for saving their configurations and data. In the specific case of _blazegraph_ and _postgres_, since they are databases, we decided to bind them (at least temporarily) to a specific node, dedicated to saving data.
-
-At this time the entire stack has been replicated 2 times to separate the development/testing environment from the production.
-
-![Deployement](RackMultipart20210909-4-1giibgc_html_ec4380ea19d7b2b0.png)
-
 ## **SOLID**
-
-- Descrizione dell&#39;implementazione finale
 
 ### **ACTIVITIES**
 
@@ -140,22 +126,46 @@ From the operational point of view, the first activity was to understand how to 
 
 #### Testing
 
-For the evaluation of the whole implementation, we decided to run two different kinds of tests, namely some specific tests (available also for the demos) through the help of some auxiliary tools like _POSTMAN_ with the goal of assessing the proper working of all the operations required for this release, and some more structured tests, with the goal of verifying which NGSI-LD APIs we currently cover. In particular, for this last case, we used the official open-source testSuite provided by the [FIWARE](https://github.com/FIWARE/NGSI-LD_TestSuite) community. We detail in the following table the results achieved and we remark that we currently support the entities/attributes providing and consumption, as expected for the first release.
+For the evaluation of the whole implementation, we decided to run two different kinds of tests, namely a set of [specific tests](https://github.com/vaimee/dasi-breaker/blob/main/reports/prototypes.md#prototypes) (available also for the demos) through the help of some auxiliary tools like _POSTMAN_ with the goal of assessing the proper working of all the operations required for this release, and some more structured tests, with the goal of verifying which NGSI-LD APIs we currently cover. In particular, for this last case, we used the official open-source testSuite provided by the [FIWARE](https://github.com/FIWARE/NGSI-LD_TestSuite) community. We detail in the following table the main results achieved and we highlight that we currently fully support the entities/attributes providing and consumption as well as the context source registration, we are currently working on the subscriptions and we need to make more investigations about the entity/attributes part.
 
-**TODO: Insert test table reference**
+| Resource Name 	| Test Success 	|
+|---	|---	|
+| Entity list 	| Yes 	|
+| Entity by id 	| Yes 	|
+| Entity Attribute List 	| No 	|
+| Attribute by id 	| No 	|
+| Subscriptions List 	| Yes 	|
+| Subscription by Id 	| ? 	|
+| Context source registration list 	| Yes 	|
+|
+
+For the details of the current status for the mapping of NGSI-LD APIs, please refer to [this table](https://docs.google.com/document/d/1_ZA-QoA0r5iM6AetykwMvs3iGmANZyZTThvH45QJFgc/edit?usp=sharing).
 
 
 ### **RESULTS**
-
+- Mapping of the NGSI-LD APIs according to the [table](https://docs.google.com/document/d/1_ZA-QoA0r5iM6AetykwMvs3iGmANZyZTThvH45QJFgc/edit?usp=sharing) previously introduced
 - Link: [https://ngsi.dasibreaker.vaimee.it](https://ngsi.dasibreaker.vaimee.it/)
+- Starting discussions with the community of the [Scorpio broker](https://github.com/ScorpioBroker/ScorpioBroker/issues/230) and [FIWARE](https://github.com/FIWARE/NGSI-LD_TestSuite/issues/70)
 
+
+## **DEPLOYMENT**
+
+The entire system runs on a cluster of Linux machines grouped together via [Docker Swarm](https://docs.docker.com/engine/swarm/).
+
+As you can see from the figure below and the [compose-file](https://todo.com/), there are 7 swarm services connected through the _default_ overlay network. This network allows the various services to communicate with each other securely; in fact, all traffic is encrypted by default using the AES algorithm in GCM mode. The only exposed services are those connected to the _traefik_ network that allows them to serve the related APIs on specific domains.
+
+Some of these services need one or more volumes for saving their configurations and data. In the specific case of _blazegraph_ and _postgres_, since they are databases, we decided to bind them (at least temporarily) to a specific node, dedicated to saving data.
+
+At this time the entire stack has been replicated two times to separate the development/testing environment from the production.
+
+![Deployement](RackMultipart20210909-4-1giibgc_html_ec4380ea19d7b2b0.png)
 ## **FUTURE STEPS**
 
-According to the project proposal, the next steps for the NGSI-LD part will be to keep mapping the NGSI-LD API to the right behaviour on the SEPA component. In particular, for the next delivery we need to focus on the context source registration and discovery, while for the last one we will include the context information and context source subscription functionalities. In both cases, the main effort will be to keep translating the original SQL queries of Scorpio to the proper SPARQL queries, including those ones that integrate geospatial features.
+According to the project proposal, the next steps for the NGSI-LD part will be to keep mapping the NGSI-LD API to the right behavior on the SEPA component. In particular, we need to focus on the translation of Scorpio's SQL queries that include geospatial features into the proper SPARQL queries. Another important work will be to identify and use -according to the rest of the architecture- the security layer provided by Scorpio for granting the right access to the resources.
 
-## **CONCLUSIONS**
+<!---## **CONCLUSIONS**
 
-alla fine
+alla fine-->
 
 
 
