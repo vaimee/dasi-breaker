@@ -44,30 +44,28 @@ Thanks to our contribution, it’s now possible to define a vCard group containi
 Here we show an example where we define a simple vCard group **<http://localhost:3000/test_group.ttl#customGroup>** with only one member named **<http://localhost:3000/test_user>**.
 
 ```turtle
-@prefix acl: <http://www.w3.org/ns/auth/acl#>;.
-@prefix dc: <http://purl.org/dc/terms/>;.
-@prefix vcard: <http://www.w3.org/2006/vcard/ns#>;.
-@prefix xsd: <http://www.w3.org/2001/XMLSchema#>;.
+# http://localhost:3000/test_group.ttl
+@prefix dc: <http://purl.org/dc/terms/>
+@prefix vcard: <http://www.w3.org/2006/vcard/ns#>
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#>
 
-<#test> a vcard:Group;
-vcard:hasUID <urn:uuid:8831CBAD-1111-2222-8563-F0F4787E5398:ABGroup>;
-dc:created "2013-09-11T07:18:19Z"^^xsd:dateTime;
-dc:modified "2015-08-08T14:45:15Z"^^xsd:dateTime;
-vcard:hasMember <http://localhost:3000/user\_group#me>. 
+<#customGroup> a vcard:Group;
+    vcard:hasUID    <urn:uuid:8831CBAD-1111-2222-8563-F0F4787E5398:ABGroup>;
+    dc:created      "2021-07-11T07:18:19Z"^^xsd:dateTime;
+    dc:modified     "2021-08-08T14:45:15Z"^^xsd:dateTime;
+    vcard:hasMember <http://localhost:3000/test_user>. 
 ```
 
 The ACL of a resource can grant some permissions to our “customGroup” in the following way:
 
 ```turtle
-@prefix acl:  <http://www.w3.org/ns/auth/acl#>;.
-@prefix foaf: <http://xmlns.com/foaf/0.1/>;.
+@prefix acl:  <http://www.w3.org/ns/auth/acl#>
 
-<#authorization>
- a acl:Authorization;
-acl:accessTo <./myfile.ttl>;
-acl:mode acl:Read;
-acl:mode acl:Write;
-acl:agentGroup <http://localhost:3000/test\_group#test>. 
+<#authorization> a acl:Authorization;
+    acl:accessTo   <./protectedFile.ttl>;
+    acl:mode       acl:Read;
+    acl:mode       acl:Write;
+    acl:agentGroup <http://localhost:3000/test_group.ttl#customGroup>. 
 ```
 
 #### Contributions to SEPA
