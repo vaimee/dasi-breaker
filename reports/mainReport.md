@@ -137,7 +137,7 @@ For the evaluation of the whole implementation, we decided to run two different 
 | Subscriptions List 	| Yes 	|
 | Subscription by Id 	| ? 	|
 | Context source registration list 	| Yes 	|
-|
+
 
 For the details of the current status for the mapping of NGSI-LD APIs, please refer to [this table](https://docs.google.com/document/d/1_ZA-QoA0r5iM6AetykwMvs3iGmANZyZTThvH45QJFgc/edit?usp=sharing).
 
