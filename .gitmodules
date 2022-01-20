@@ -10,7 +10,7 @@
 [submodule "scorpio"]
 	path = scorpio
 	url = https://github.com/vaimee/ScorpioBroker.git
-	branch = development
+	branch = dasi-breaker-main
 [submodule "monas-front"]
 	path = monas-front
 	url = https://github.com/vaimee/monas-front.git
