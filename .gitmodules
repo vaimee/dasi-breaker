@@ -10,3 +10,6 @@
 [submodule "scorpio"]
 	path = scorpio
 	url = https://github.com/vaimee/ScorpioBroker.git
+[submodule "monas-front"]
+	path = monas-front
+	url = https://github.com/vaimee/monas-front.git
