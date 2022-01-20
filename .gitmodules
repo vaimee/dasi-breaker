@@ -4,3 +4,6 @@
 [submodule "community-server"]
 	path = community-server
 	url = https://github.com/vaimee/community-server.git
+[submodule "dasi-agents"]
+	path = dasi-agents
+	url = https://github.com/vaimee/dasi-agents.git
