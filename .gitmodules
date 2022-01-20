@@ -7,3 +7,6 @@
 [submodule "dasi-agents"]
 	path = dasi-agents
 	url = https://github.com/vaimee/dasi-agents.git
+[submodule "scorpio"]
+	path = scorpio
+	url = https://github.com/vaimee/ScorpioBroker.git
