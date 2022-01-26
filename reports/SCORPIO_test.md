@@ -1,5 +1,5 @@
 # Summary
-![Results](imgs/TestSuite.png)
+![Results](../imgs/TestSuite.png)
 # Tests passed:
 * Query_entities_test
   * query by type 029
