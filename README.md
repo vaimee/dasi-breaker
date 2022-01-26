@@ -36,4 +36,4 @@ The project is funded by EU under the Grant Agreement No.: 871498 Call: H2020-IC
 * [Prototypes and demonstrators](reports/prototypes.md)
 
 # Phase 2 MVP
-![MVP](imgs/DasiBreakerMVP.png)
+![Final MVP](reports/MVP.md)
