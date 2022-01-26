@@ -1,5 +1,5 @@
 # MVP schema
-![MVP](imgs/DasiBreakerMVP.png)
+![MVP](../imgs/DasiBreakerMVP.png)
 
 # MVP description
 
@@ -35,5 +35,5 @@ Here the [NGSI-LD_TestSuite](https://github.com/FIWARE/NGSI-LD_TestSuite) result
 
 Summary:
 
-![Results](imgs/TestSuite.png)
+![Results](../imgs/TestSuite.png)
 
